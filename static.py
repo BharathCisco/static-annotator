@@ -1,6 +1,7 @@
 import subprocess
 import json
 import sys
+import os
 
 
 def run_mypy(file_path):
@@ -34,7 +35,6 @@ def run_pyanalyze(file_path):
             capture_output=True,
             text=True
         )
-        # Capture both stdout and stderr for errors or warnings
         output = result.stdout.strip() or result.stderr.strip()
         return {"pyanalyze": output if output else "No issues or output detected."}
     except Exception as e:
@@ -43,22 +43,40 @@ def run_pyanalyze(file_path):
 
 def analyze_file(file_path):
     analysis_results = {}
-    analysis_results.update(run_mypy(file_path))
-    analysis_results.update(run_pyright(file_path))
-    analysis_results.update(run_pyanalyze(file_path))
+    analysis_results[file_path] = {
+        **run_mypy(file_path),
+        **run_pyright(file_path),
+        **run_pyanalyze(file_path)
+    }
+    return analysis_results
+
+
+def analyze_folder(folder_path):
+    all_results = {}
+    for root, _, files in os.walk(folder_path):
+        for file in files:
+            if file.endswith(".py"):
+                file_path = os.path.join(root, file)
+                all_results.update(analyze_file(file_path))
 
     # Save results to static_results.json
-    with open("static_results.json", "w") as f:
-        json.dump(analysis_results, f, indent=4)
+    with open("task_manager_results.json", "w") as f:
+        json.dump(all_results, f, indent=4)
 
-    print("Results saved in static_results.json")
+    print(f"Results saved in static_results.json for all Python files in '{folder_path}'.")
 
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python annotator_analysis.py <file_path>")
+        print("Usage: python annotator_analysis.py <file_or_folder_path>")
         sys.exit(1)
 
-    file_path = sys.argv[1]
-    analyze_file(file_path)
+    path = sys.argv[1]
 
+    if os.path.isdir(path):
+        analyze_folder(path)
+    elif os.path.isfile(path):
+        analyze_folder(os.path.dirname(path))
+    else:
+        print("Invalid path. Please provide a valid file or folder.")
+        sys.exit(1)

@@ -1,0 +1,49 @@
+{
+    "./taskManagmentCli/task_manager.py": {
+        "mypy": {
+            "summary": "Success: no issues found in 1 source file"
+        },
+        "pyright": {
+            "summary": "0 errors, 0 warnings, 0 informations",
+            "note": "WARNING: there is a new pyright version available (v1.1.396 -> v1.1.398). Please install the new version or set PYRIGHT_PYTHON_FORCE_VERSION to `latest`"
+        },
+        "pyanalyze": {
+            "summary": "No issues or output detected."
+        }
+    },
+    "./taskManagmentCli/cli.py": {
+        "mypy": {
+            "errors": [
+                {
+                    "line": 2,
+                    "error": "Library stubs not installed for 'tabulate'",
+                    "note": [
+                        "Hint: \"python3 -m pip install types-tabulate\"",
+                        "(or run \"mypy --install-types\" to install all missing stub packages)",
+                        "See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports"
+                    ]
+                }
+            ],
+            "summary": "Found 1 error in 1 file (checked 1 source file)"
+        },
+        "pyright": {
+            "summary": "0 errors, 0 warnings, 0 informations",
+            "note": "WARNING: there is a new pyright version available (v1.1.396 -> v1.1.398). Please install the new version or set PYRIGHT_PYTHON_FORCE_VERSION to `latest`"
+        },
+        "pyanalyze": {
+            "error": {
+                "type": "ModuleNotFoundError",
+                "message": "No module named 'task_manager'",
+                "line": 3,
+                "code": "import_failed",
+                "traceback": [
+                    "In ./taskManagmentCli/cli.py at line 1",
+                    "   1: import sys",
+                    "      ^",
+                    "   2: from tabulate import tabulate",
+                    "   3: from task_manager import TaskManager"
+                ]
+            }
+        }
+    }
+}

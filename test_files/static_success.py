@@ -3,7 +3,6 @@ def my_function(x, y):
     z = x + len(y)
     return z
 
-
 def another_function(a, b):
     """Takes a list of integers and a dictionary, returns a tuple."""
     result_list = [i * 2 for i in a]
